@@ -1,0 +1,6 @@
+node_modules
+lib
+*.cache
+.npmrc
+.idea
+*.log

@@ -1,0 +1,42 @@
+{
+  "name": "template-typescript-package",
+  "version": "1.0.0",
+  "description": "This is a template to create npm package with typescript",
+  "private": false,
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "author": {
+    "name": "Axel Hecht",
+    "url": "https://github.com/hecht-a"
+  },
+  "bugs": {
+    "url": "https://github.com/hecht-a/template-typescript-package/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hecht-a/template-typescript-package.git"
+  },
+  "scripts": {
+    "build": "rollup --config rollup.config.ts",
+    "types": "tsc --declaration --emitDeclarationOnly --project tsconfig.types.json",
+    "lint": "eslint --ext .ts,.js ."
+  },
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^8.4.0",
+    "@typescript-eslint/eslint-plugin": "^4.33.0",
+    "@typescript-eslint/parser": "^4.33.0",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-json": "^2.1.2",
+    "rollup": "^2.79.0",
+    "rollup-plugin-delete": "^2.0.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "tslib": "^2.4.0",
+    "typescript": "^4.8.2"
+  }
+}
