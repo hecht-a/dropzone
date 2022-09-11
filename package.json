@@ -1,10 +1,10 @@
 {
-  "name": "template-typescript-package",
+  "name": "@hecht-a/dropzone",
   "version": "1.0.0",
-  "description": "This is a template to create npm package with typescript",
+  "description": "This is a package to create file dropzone in html",
   "private": false,
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "lib/Dropzone.js",
+  "types": "lib/Dropzone.d.ts",
   "files": [
     "lib"
   ],
@@ -13,16 +13,17 @@
     "url": "https://github.com/hecht-a"
   },
   "bugs": {
-    "url": "https://github.com/hecht-a/template-typescript-package/issues"
+    "url": "https://github.com/hecht-a/dropzone/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/hecht-a/template-typescript-package.git"
+    "url": "https://github.com/hecht-a/dropzone.git"
   },
   "scripts": {
-    "build": "rollup --config rollup.config.ts",
+    "build": "rollup --config rollup.config.ts --watch",
     "types": "tsc --declaration --emitDeclarationOnly --project tsconfig.types.json",
-    "lint": "eslint --ext .ts,.js ."
+    "lint": "eslint --ext .ts,.js .",
+    "start": "node lib/index.js"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.4.0",
