@@ -5,7 +5,7 @@ import typescript from "@rollup/plugin-typescript";
 import scss from 'rollup-plugin-scss'
 
 export default {
-    input: resolve("src", "index.ts"),
+    input: resolve("src", "Dropzone.ts"),
     plugins: [
         remove({targets: resolve("lib", "*")}),
         typescript(),
@@ -13,7 +13,7 @@ export default {
         scss()
     ],
     output: {
-        file: resolve("lib", "index.js"),
+        file: resolve("lib", "Dropzone.js"),
         format: "cjs"
     }
 }
