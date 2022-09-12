@@ -1,10 +1,11 @@
 import { Emitter } from "./Emitter";
-import { NotInFormError, InvalidElementError, InvalidInputTypeError } from "./Exceptions";
+import {
+	NotInFormError, InvalidElementError, InvalidInputTypeError, AlreadyExistsError,
+} from "./Exceptions";
 import { options } from "./options";
 import { DefaultOptions } from "./types";
 import { removeExt } from "./utils";
 import "../style.scss";
-import { AlreadyExistsError } from "./Exceptions/AlreadyExistsError";
 
 export class Dropzone extends Emitter {
 	private readonly options: typeof options = options;
