@@ -1,0 +1,68 @@
+.hidden {
+    display: none;
+}
+
+.dropzone {
+    display: none;
+}
+
+.dz__dropzone {
+    border: 2px dashed #636e72;
+    margin: auto;
+    border-radius: 4px;
+    width: 400px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .dz__label {
+        height: 100%;
+        margin: auto;
+        display: flex;
+        align-items: center;
+    }
+
+    .dz__files {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        gap: 10px;
+        margin: 10px;
+
+        .file {
+            width: 80px;
+            height: 80px;
+            margin: auto 0;
+            position: relative;
+            border-radius: 4px;
+            background: #cacaca;
+
+            p, button {
+                position: absolute;
+            }
+
+            p {
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: .8em;
+            }
+
+            button {
+                top: 3px;
+                right: 3px;
+                border: none;
+                background: none;
+                width: 20px;
+                height: 20px;
+                padding: 0;
+
+                svg {
+                    width: 20px;
+                    height: 20px;
+                }
+            }
+        }
+    }
+}

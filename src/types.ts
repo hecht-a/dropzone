@@ -1,15 +1,19 @@
 type Options = {
 	label: string,
 	hoverLabel: string,
+	containerTemplate: (files?: FileList, label?: string) => string,
+	fileTemplate: (fileName: string) => string,
 	onHover: () => void,
 	onLeave: () => void,
 	onAddFile: (file: File) => void,
 	onAddFiles: (files: FileList) => void,
 	onError: (error: Error) => void,
 	onDrop: (files: FileList) => void,
-	onDragEnter: () => void
-	onDragLeave: () => void
-	onDragOver: () => void
+	onDragEnter: () => void,
+	onDragLeave: () => void,
+	onDragOver: () => void,
+	onRefreshDropzone: () => void,
+	onRemoveFile: (file: File) => void
 };
 
 export type DefaultOptions = Partial<Options>;

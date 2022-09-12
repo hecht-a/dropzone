@@ -17,6 +17,7 @@ export class Emitter {
 
 		if (callbacks) {
 			for (const callback of callbacks) {
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
 				callback.apply(this, args);
 			}

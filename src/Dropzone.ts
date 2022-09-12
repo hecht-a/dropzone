@@ -2,30 +2,39 @@ import { Emitter } from "./Emitter";
 import { NotInFormError, InvalidElementError, InvalidInputTypeError } from "./Exceptions";
 import { options } from "./options";
 import { DefaultOptions } from "./types";
+import { removeExt } from "./utils";
 
 export class Dropzone extends Emitter {
 	private readonly options: typeof options = options;
 
 	constructor(private element: HTMLInputElement, options: DefaultOptions) {
 		super();
+		this.options = { ...this.options, ...options };
+
 		this.checkElement();
 		this.initInterface();
-
-		this.options = { ...this.options, ...options };
 	}
 
 	private checkElement(): void {
 		if (this.element.nodeName !== "INPUT") {
-			this.emit("error");
-			throw new InvalidElementError(this.element.nodeName);
+			const error = new InvalidElementError(this.element.nodeName);
+			this.emit("error", error);
+
+			throw error;
 		}
 
 		if (this.element.type !== "file") {
-			throw new InvalidInputTypeError(this.element.type);
+			const error = new InvalidInputTypeError(this.element.type);
+			this.emit("error", error);
+
+			throw error;
 		}
 
 		if (!("form" in this.element) || !this.element.form) {
-			throw new NotInFormError();
+			const error = new NotInFormError();
+			this.emit("error", error);
+
+			throw error;
 		}
 	}
 
@@ -34,24 +43,38 @@ export class Dropzone extends Emitter {
 			this.element.id = "dropzone";
 		}
 
-		const label = this.getLabel();
+		const dropzone = this.getDropzone();
 
-		label.addEventListener("dragenter", (e) => {
+		this.element.addEventListener("change", () => {
+			this.refreshDropzone(this.element.files!);
+		});
+		dropzone.addEventListener("click", (e) => {
+			const target = e.target as HTMLElement | null;
+
+			if (target && ["svg", "button", "path"].includes(target.nodeName.toLowerCase())) {
+				return;
+			}
+			this.element.click();
+		});
+		dropzone.addEventListener("dragenter", (e) => {
 			e.preventDefault();
-			label.classList.add("border__label-white");
+			dropzone.classList.add("border__label-hover");
 			this.emit("dragEnter");
 		});
-		label.addEventListener("dragleave", (e) => {
+		dropzone.addEventListener("dragleave", (e) => {
 			e.preventDefault();
-			label.classList.remove("border__label-white");
+			dropzone.classList.remove("border__label-hover");
 			this.emit("dragLeave");
 		});
-		label.addEventListener("dragover", (e) => {
+		dropzone.addEventListener("dragover", (e) => {
 			e.preventDefault();
 			this.emit("dragOver");
 		});
-		label.addEventListener("drop", (e) => {
+		dropzone.addEventListener("drop", (e) => {
 			const { files } = e.dataTransfer!;
+			e.preventDefault();
+
+			this.refreshDropzone(files);
 			for (let i = 0; i < files.length; i++) {
 				if (!files.item(i)) {
 					return;
@@ -65,8 +88,6 @@ export class Dropzone extends Emitter {
 			} else {
 				this.emit("addFiles", files);
 			}
-
-			e.preventDefault();
 		});
 
 		this.onMouseHover();
@@ -77,9 +98,6 @@ export class Dropzone extends Emitter {
 		const files = Array.from(this.element.files!);
 		files.push(file);
 		this.element.files = this.createFileList(files);
-
-		const label = this.getLabel();
-		label.innerHTML = "<div><div>test</div></div>";
 	}
 
 	private createFileList(files: File[]): FileList {
@@ -91,33 +109,57 @@ export class Dropzone extends Emitter {
 		return dataTransfer.files;
 	}
 
-	private getLabel(): HTMLLabelElement {
-		let label: HTMLLabelElement | null = this.element.form!.querySelector(`label[for='${this.element.id}']`);
+	private getDropzone(): HTMLDivElement {
+		let dropzone: HTMLDivElement | null = this.element.form!.querySelector(".dz__dropzone");
 
-		if (!label) {
-			label = document.createElement("label");
-			label.htmlFor = this.element.id;
-			label.classList.add("dropzone__label");
-			label.textContent = this.options.label!;
-			this.element.insertAdjacentElement("beforebegin", label);
+		if (!dropzone) {
+			dropzone = document.createElement("div");
+			dropzone.innerHTML = this.options.containerTemplate!(undefined, this.options.label);
+			this.element.insertAdjacentElement("beforebegin", dropzone.firstElementChild!);
 		}
 
-		return label;
+		return document.querySelector(".dz__dropzone") as HTMLDivElement;
 	}
 
 	private onMouseHover(): void {
-		const label = this.getLabel();
+		const label = this.getDropzone();
 		label.addEventListener("mouseover", () => {
-			label.classList.add("border__label-white");
+			label.classList.add("border__label-hover");
 			this.emit("hover");
 		});
 	}
 
 	private onMouseLeave(): void {
-		const label = this.getLabel();
+		const label = this.getDropzone();
 		label.addEventListener("mouseleave", () => {
-			label.classList.remove("border__label-white");
+			label.classList.remove("border__label-hover");
 			this.emit("leave");
 		});
+	}
+
+	private refreshDropzone(files: FileList): void {
+		document.querySelector(".dz__dropzone")!.outerHTML = this.options.containerTemplate!(files, this.options.label);
+		this.initButtonsListeners();
+		this.initInterface();
+		this.emit("refreshDropzone");
+	}
+
+	private initButtonsListeners(): void {
+		const buttons = Array.from<HTMLButtonElement>(document.querySelectorAll(".dz__delete-file"));
+		for (const button of buttons) {
+			button.addEventListener("click", () => {
+				const files = this.removeFile(button.name);
+				this.element.files = files;
+				this.refreshDropzone(files);
+			});
+		}
+	}
+
+	private removeFile(fileName: string): FileList {
+		const { files } = this.element;
+		const filesArray = Array.from(files!);
+		this.emit("removeFile", filesArray.filter((file) => removeExt(file.name) === fileName)[0]);
+
+		return this.createFileList(filesArray.filter((file) => removeExt(file.name) !== fileName));
 	}
 }
