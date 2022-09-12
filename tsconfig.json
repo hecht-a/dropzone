@@ -20,5 +20,8 @@
     "removeComments": true,
     "forceConsistentCasingInFileNames": true
   },
+  "ts-node": {
+    "transpileOnly": true
+  },
   "include": ["src"]
 }

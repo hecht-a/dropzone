@@ -21,3 +21,7 @@ publish-npmjs:
 .PHONY: types
 types:
 	yarn run types
+
+.PHONY: test
+test:
+	node --loader=ts-node/esm bin/test.ts
