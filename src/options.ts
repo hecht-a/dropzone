@@ -4,8 +4,8 @@ import { removeExt } from "./utils";
 export const options: DefaultOptions = {
 	hoverLabel: "hover",
 	label: "Upload files",
-	containerTemplate(files?: FileList, label?: string) {
-		return `<div class="dz__dropzone">
+	containerTemplate(files?: FileList, label?: string, id = "dropzone") {
+		return `<div class="dz__dropzone" data-for="${id}">
         ${
 	files && files.length > 0
 		? `<div class="dz__files">
