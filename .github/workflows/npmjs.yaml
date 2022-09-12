@@ -1,0 +1,35 @@
+name: Package npmjs
+
+on:
+  push:
+    branches:
+      - master
+
+
+jobs:
+  package:
+    name: Build and publish the package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the project
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install the dependencies
+        run: make install
+
+      - name: Build the project
+        run: make build
+
+      - name: Build the types
+        run: make types
+
+      - name: Publish the package
+        run: 'make publish-npmjs || true'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
