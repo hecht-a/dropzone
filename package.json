@@ -21,7 +21,7 @@
   },
   "scripts": {
     "build": "rollup --config rollup.config.ts",
-    "dev": "rollup --config rollup.config.ts --watch",
+    "dev": "rollup --config rollup.config.dev.ts --watch",
     "types": "tsc --declaration --emitDeclarationOnly --project tsconfig.types.json",
     "lint": "eslint --ext .ts,.js .",
     "start": "node lib/index.js"
