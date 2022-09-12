@@ -85,18 +85,12 @@ export class Dropzone extends Emitter {
 			e.preventDefault();
 
 			this.refreshDropzone(files);
-			for (let i = 0; i < files.length; i++) {
-				if (!files.item(i)) {
-					return;
-				}
-				this.addFile(files.item(i)!);
-			}
 			this.emit("drop", files);
 
 			if (files.length === 1) {
-				this.emit("addFile", files.item(0));
+				this.addFile(files.item(0)!);
 			} else {
-				this.emit("addFiles", files);
+				this.addFiles(files);
 			}
 		});
 
@@ -108,6 +102,17 @@ export class Dropzone extends Emitter {
 		const files = Array.from(this.element.files!);
 		files.push(file);
 		this.element.files = this.createFileList(files);
+		this.emit("addFile", file);
+	}
+
+	private addFiles(files: FileList): void {
+		for (let i = 0; i < files.length; i++) {
+			if (!files.item(i)) {
+				return;
+			}
+			this.addFile(files.item(i)!);
+		}
+		this.emit("addFiles", files);
 	}
 
 	private createFileList(files: File[]): FileList {
