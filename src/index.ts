@@ -1,5 +1,9 @@
-function foo(bar: string) {
-    console.log(bar)
-}
+import { Dropzone } from "./Dropzone";
+import "../style.scss";
 
-foo('bar')
+const form = document.querySelector("form");
+const fileInput: HTMLInputElement = form!.querySelector(".dropzone")!;
+
+const dropzone = new Dropzone(fileInput, { label: "Envoyez vos fichiers ici" });
+
+dropzone.on("removeFile", console.log);
