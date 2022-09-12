@@ -68,12 +68,12 @@ export class Dropzone extends Emitter {
 		});
 		dropzone.addEventListener("dragenter", (e) => {
 			e.preventDefault();
-			dropzone.classList.add("border__label-hover");
+			dropzone.classList.add("border__dropzone-hover");
 			this.emit("dragEnter");
 		});
 		dropzone.addEventListener("dragleave", (e) => {
 			e.preventDefault();
-			dropzone.classList.remove("border__label-hover");
+			dropzone.classList.remove("border__dropzone-hover");
 			this.emit("dragLeave");
 		});
 		dropzone.addEventListener("dragover", (e) => {
@@ -135,7 +135,7 @@ export class Dropzone extends Emitter {
 	private onMouseHover(): void {
 		const label = this.getDropzone();
 		label.addEventListener("mouseover", () => {
-			label.classList.add("border__label-hover");
+			label.classList.add("border__dropzone-hover");
 			this.emit("hover");
 		});
 	}
@@ -143,7 +143,7 @@ export class Dropzone extends Emitter {
 	private onMouseLeave(): void {
 		const label = this.getDropzone();
 		label.addEventListener("mouseleave", () => {
-			label.classList.remove("border__label-hover");
+			label.classList.remove("border__dropzone-hover");
 			this.emit("leave");
 		});
 	}
