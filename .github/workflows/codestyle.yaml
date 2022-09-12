@@ -1,0 +1,23 @@
+name: Code Style CI
+
+on:
+  push:
+    branches:
+      - *
+
+  pull_request:
+
+jobs:
+  codestyle:
+    name: Check code style
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the project
+        uses: actions/checkout@v2
+
+      - name: Install the Node.js dependencies
+        run: make install
+
+      - name: Check if the code style of the source-codes is consistently applied
+        run: make lint
