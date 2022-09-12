@@ -4,6 +4,7 @@ import { options } from "./options";
 import { DefaultOptions } from "./types";
 import { removeExt } from "./utils";
 import "../style.scss";
+import { AlreadyExistsError } from "./Exceptions/AlreadyExistsError";
 
 export class Dropzone extends Emitter {
 	private readonly options: typeof options = options;
@@ -17,6 +18,13 @@ export class Dropzone extends Emitter {
 	}
 
 	private checkElement(): void {
+		if (document.querySelector(`[data-for='${this.element.id}']`)) {
+			const error = new AlreadyExistsError(this.element.id);
+			this.emit("error", error);
+
+			throw error;
+		}
+
 		if (this.element.nodeName !== "INPUT") {
 			const error = new InvalidElementError(this.element.nodeName);
 			this.emit("error", error);
@@ -111,15 +119,16 @@ export class Dropzone extends Emitter {
 	}
 
 	private getDropzone(): HTMLDivElement {
-		let dropzone: HTMLDivElement | null = this.element.form!.querySelector(".dz__dropzone");
+		let dropzone: HTMLDivElement | null = this.element.form!.querySelector(`[data-for='${this.element.id}']`);
 
 		if (!dropzone) {
 			dropzone = document.createElement("div");
 			dropzone.innerHTML = this.options.containerTemplate!(undefined, this.options.label);
+			dropzone.firstElementChild!.setAttribute("data-for", this.element.id);
 			this.element.insertAdjacentElement("beforebegin", dropzone.firstElementChild!);
 		}
 
-		return document.querySelector(".dz__dropzone") as HTMLDivElement;
+		return document.querySelector(`[data-for='${this.element.id}']`) as HTMLDivElement;
 	}
 
 	private onMouseHover(): void {
@@ -139,14 +148,19 @@ export class Dropzone extends Emitter {
 	}
 
 	private refreshDropzone(files: FileList): void {
-		document.querySelector(".dz__dropzone")!.outerHTML = this.options.containerTemplate!(files, this.options.label);
+		const dropzone = this.getDropzone();
+		dropzone.outerHTML = this.options.containerTemplate!(files, this.options.label, this.element.id);
+
 		this.initButtonsListeners();
 		this.initInterface();
 		this.emit("refreshDropzone");
 	}
 
 	private initButtonsListeners(): void {
-		const buttons = Array.from<HTMLButtonElement>(document.querySelectorAll(".dz__delete-file"));
+		const buttons = Array
+			.from<HTMLButtonElement>(
+			document.querySelectorAll(`[data-for='${this.element.id}'] .dz__delete-file`),
+		);
 		for (const button of buttons) {
 			button.addEventListener("click", () => {
 				const files = this.removeFile(button.name);

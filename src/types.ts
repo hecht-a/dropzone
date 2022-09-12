@@ -1,7 +1,8 @@
 type Options = {
+	id: string,
 	label: string,
 	hoverLabel: string,
-	containerTemplate: (files?: FileList, label?: string) => string,
+	containerTemplate: (files?: FileList, label?: string, id?: string) => string,
 	fileTemplate: (fileName: string) => string,
 	onHover: () => void,
 	onLeave: () => void,
