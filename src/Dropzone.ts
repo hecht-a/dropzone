@@ -241,4 +241,12 @@ export class Dropzone extends Emitter {
 
 		return this.createFileList(filesArray.filter((file) => removeExt(file.name) !== fileName));
 	}
+
+	/**
+	 * Remove all files from the input
+	 */
+	public clearFiles(): void {
+		this.element.files = new FileList();
+		this.refreshDropzone(this.element.files);
+	}
 }
