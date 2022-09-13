@@ -15,6 +15,7 @@ type Options = {
 	onDragOver: () => void,
 	onRefreshDropzone: () => void,
 	onRemoveFile: (file: File) => void
+	onClearDropzone: (files: FileList) => void
 };
 
 export type DefaultOptions = Partial<Options>;

@@ -246,7 +246,9 @@ export class Dropzone extends Emitter {
 	 * Remove all files from the input
 	 */
 	public clearFiles(): void {
-		this.element.files = new FileList();
+		const { files } = this.element;
+		this.element.files = new DataTransfer().files;
 		this.refreshDropzone(this.element.files);
+		this.emit("clearDropzone", files);
 	}
 }
