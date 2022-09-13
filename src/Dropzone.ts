@@ -1,14 +1,20 @@
 import { Emitter } from "./Emitter";
-import { NotInFormError, InvalidElementError, InvalidInputTypeError } from "./Exceptions";
+import {
+	NotInFormError, InvalidElementError, InvalidInputTypeError, AlreadyExistsError,
+} from "./Exceptions";
 import { options } from "./options";
 import { DefaultOptions } from "./types";
 import { removeExt } from "./utils";
 import "../style.scss";
-import { AlreadyExistsError } from "./Exceptions/AlreadyExistsError";
 
 export class Dropzone extends Emitter {
 	private readonly options: typeof options = options;
 
+	/**
+	 * Dropzone constructor.
+	 * @param {HTMLInputElement} element
+	 * @param {DefaultOptions} options
+	 */
 	constructor(private element: HTMLInputElement, options: DefaultOptions) {
 		super();
 		this.options = { ...this.options, ...options };
@@ -17,6 +23,10 @@ export class Dropzone extends Emitter {
 		this.initInterface();
 	}
 
+	/**
+	 * Check if element given in constructor is correct.
+	 * @private
+	 */
 	private checkElement(): void {
 		if (document.querySelector(`[data-for='${this.element.id}']`)) {
 			const error = new AlreadyExistsError(this.element.id);
@@ -47,6 +57,11 @@ export class Dropzone extends Emitter {
 		}
 	}
 
+	/**
+	 * Init the interface.
+	 * Generate html and event listeners.
+	 * @private
+	 */
 	private initInterface(): void {
 		if (!this.element.id) {
 			this.element.id = "dropzone";
@@ -67,12 +82,12 @@ export class Dropzone extends Emitter {
 		});
 		dropzone.addEventListener("dragenter", (e) => {
 			e.preventDefault();
-			dropzone.classList.add("border__label-hover");
+			dropzone.classList.add("border__dropzone-hover");
 			this.emit("dragEnter");
 		});
 		dropzone.addEventListener("dragleave", (e) => {
 			e.preventDefault();
-			dropzone.classList.remove("border__label-hover");
+			dropzone.classList.remove("border__dropzone-hover");
 			this.emit("dragLeave");
 		});
 		dropzone.addEventListener("dragover", (e) => {
@@ -84,18 +99,12 @@ export class Dropzone extends Emitter {
 			e.preventDefault();
 
 			this.refreshDropzone(files);
-			for (let i = 0; i < files.length; i++) {
-				if (!files.item(i)) {
-					return;
-				}
-				this.addFile(files.item(i)!);
-			}
 			this.emit("drop", files);
 
 			if (files.length === 1) {
-				this.emit("addFile", files.item(0));
+				this.addFile(files.item(0)!);
 			} else {
-				this.emit("addFiles", files);
+				this.addFiles(files);
 			}
 		});
 
@@ -103,12 +112,39 @@ export class Dropzone extends Emitter {
 		this.onMouseLeave();
 	}
 
+	/**
+	 * Add a file to the input.
+	 * @param {File} file
+	 * @private
+	 */
 	private addFile(file: File): void {
 		const files = Array.from(this.element.files!);
 		files.push(file);
 		this.element.files = this.createFileList(files);
+		this.emit("addFile", file);
 	}
 
+	/**
+	 * Add files to the input.
+	 * @param {FileList} files
+	 * @private
+	 */
+	private addFiles(files: FileList): void {
+		for (let i = 0; i < files.length; i++) {
+			if (!files.item(i)) {
+				return;
+			}
+			this.addFile(files.item(i)!);
+		}
+		this.emit("addFiles", files);
+	}
+
+	/**
+	 * Create FileList instance from array of File.
+	 * @param {File[]} files
+	 * @return FileList
+	 * @private
+	 */
 	private createFileList(files: File[]): FileList {
 		const dataTransfer = new DataTransfer();
 		files.forEach((file) => {
@@ -118,6 +154,11 @@ export class Dropzone extends Emitter {
 		return dataTransfer.files;
 	}
 
+	/**
+	 * Get or generate the html of the dropzone.
+	 * @return HTMLDivElement
+	 * @private
+	 */
 	private getDropzone(): HTMLDivElement {
 		let dropzone: HTMLDivElement | null = this.element.form!.querySelector(`[data-for='${this.element.id}']`);
 
@@ -131,22 +172,35 @@ export class Dropzone extends Emitter {
 		return document.querySelector(`[data-for='${this.element.id}']`) as HTMLDivElement;
 	}
 
+	/**
+	 * Method called when mouse hover the dropzone.
+	 * @private
+	 */
 	private onMouseHover(): void {
 		const label = this.getDropzone();
 		label.addEventListener("mouseover", () => {
-			label.classList.add("border__label-hover");
+			label.classList.add("border__dropzone-hover");
 			this.emit("hover");
 		});
 	}
 
+	/**
+	 * Method called when mouse leave the dropzone.
+	 * @private
+	 */
 	private onMouseLeave(): void {
 		const label = this.getDropzone();
 		label.addEventListener("mouseleave", () => {
-			label.classList.remove("border__label-hover");
+			label.classList.remove("border__dropzone-hover");
 			this.emit("leave");
 		});
 	}
 
+	/**
+	 * Refresh the dropzone.
+	 * @param {FileList} files
+	 * @private
+	 */
 	private refreshDropzone(files: FileList): void {
 		const dropzone = this.getDropzone();
 		dropzone.outerHTML = this.options.containerTemplate!(files, this.options.label, this.element.id);
@@ -156,6 +210,10 @@ export class Dropzone extends Emitter {
 		this.emit("refreshDropzone");
 	}
 
+	/**
+	 * Init button listeners used to delete an uploaded file.
+	 * @private
+	 */
 	private initButtonsListeners(): void {
 		const buttons = Array
 			.from<HTMLButtonElement>(
@@ -170,6 +228,12 @@ export class Dropzone extends Emitter {
 		}
 	}
 
+	/**
+	 * Remove file from the input.
+	 * @param {string} fileName
+	 * @return FileList
+	 * @private
+	 */
 	private removeFile(fileName: string): FileList {
 		const { files } = this.element;
 		const filesArray = Array.from(files!);
