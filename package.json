@@ -1,6 +1,6 @@
 {
   "name": "@hecht-a/dropzone",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "This is a package to create file dropzone in html",
   "private": false,
   "main": "lib/Dropzone.js",
