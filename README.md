@@ -44,27 +44,27 @@ const dropzone = new Dropzone(input, {
 
 All these options are optionnal.
 
-|                  name                   |                                   description                                    |                                   type                                   | default value  |
-|:---------------------------------------:|:--------------------------------------------------------------------------------:|:------------------------------------------------------------------------:|:--------------:|
-|                   id                    |                        Custom id to apply to the dropzone                        |                                  string                                  |   "Dropzone"   |
-|                  label                  |                      Define the label shown on the dropzone                      |                                  string                                  | "Upload files" |
-|               hoverLabel                |             Define the label shown on the dropzone when it's hovered             |                                  string                                  |    "hover"     |
-|                   min                   | Define the minimum amount of file(s) to upload (see [Dropzone#setMin](#setmin))  |                                  number                                  |       0        |
-|                   max                   | Define the maximum amount of file(s) to upload  (see [Dropzone#setMax](#setmax)) |                                  number                                  |       2        |
-|            containerTemplate            |                    Define the global template of the dropzone                    | `(max: number, files?: FileList, label?: string, id?: string) => string` |       -        |
-|              fileTemplate               |        Define the template of the file container when a file is uploaded         |                      `(fileName: string) => string`                      |       -        |
-|            [onHover](#hover)            |                             Define the event `hover`                             |                               `() => void`                               |       -        |
-|            [onLeave](#leave)            |                            Define the event `onLeave`                            |                               `() => void`                               |       -        |
-|          [onAddFile](#addfile)          |                            Define the event `addFile`                            |                          `(file: File) => void`                          |       -        |
-|         [onAddFiles](#addfiles)         |                           Define the event `addFiles`                            |                        `(file: FileList) => void`                        |       -        |
-|           [onError](#onerror)           |                             Define the event `error`                             |                         `(error: Error) => void`                         |       -        |
-|            [onDrop](#ondrop)            |                             Define the event `drop`                              |                       `(files: FileList) => void`                        |       -        |
-|       [onDragEnter](#ondragenter)       |                           Define the event `dragEnter`                           |                               `() => void`                               |       -        |
-|       [onDragLeave](#ondragleave)       |                           Define the event `dragLeave`                           |                               `() => void`                               |       -        |
-|        [onDragOver](#ondragover)        |                           Define the event `dragOver`                            |                               `() => void`                               |       -        |
-| [onRefreshDropzone](#onrefreshdropzone) |                        Define the event `refreshDropzone`                        |                               `() => void`                               |       -        |
-|      [onRemoveFile](#onremovefile)      |                          Define the event `removeFile`                           |                          `(file: File) => void`                          |       -        |
-|   [onClearDropzone](#oncleardropzone)   |                         Define the event `clearDropzone`                         |                       `(files: FileList) => void`                        |       -        |
+|                  name                   |                                       description                                        |                                   type                                   | default value  |
+|:---------------------------------------:|:----------------------------------------------------------------------------------------:|:------------------------------------------------------------------------:|:--------------:|
+|                   id                    |                            Custom id to apply to the dropzone                            |                                  string                                  |   "dropzone"   |
+|                  label                  |                          Define the label shown on the dropzone                          |                                  string                                  | "Upload files" |
+|               hoverLabel                |                 Define the label shown on the dropzone when it's hovered                 |                                  string                                  |    "hover"     |
+|                   min                   | Define the minimum amount of file(s) to upload (see [Dropzone#setMin](#dropzonesetmin))  |                                  number                                  |       0        |
+|                   max                   | Define the maximum amount of file(s) to upload  (see [Dropzone#setMax](#dropzonesetmax)) |                                  number                                  |       2        |
+|            containerTemplate            |                        Define the global template of the dropzone                        | `(max: number, files?: FileList, label?: string, id?: string) => string` |       -        |
+|              fileTemplate               |            Define the template of the file container when a file is uploaded             |                      `(fileName: string) => string`                      |       -        |
+|            [onHover](#hover)            |                                 Define the event `hover`                                 |                               `() => void`                               |       -        |
+|            [onLeave](#leave)            |                                Define the event `onLeave`                                |                               `() => void`                               |       -        |
+|          [onAddFile](#addfile)          |                                Define the event `addFile`                                |                          `(file: File) => void`                          |       -        |
+|         [onAddFiles](#addfiles)         |                               Define the event `addFiles`                                |                        `(file: FileList) => void`                        |       -        |
+|           [onError](#onerror)           |                                 Define the event `error`                                 |                         `(error: Error) => void`                         |       -        |
+|            [onDrop](#ondrop)            |                                 Define the event `drop`                                  |                       `(files: FileList) => void`                        |       -        |
+|       [onDragEnter](#ondragenter)       |                               Define the event `dragEnter`                               |                               `() => void`                               |       -        |
+|       [onDragLeave](#ondragleave)       |                               Define the event `dragLeave`                               |                               `() => void`                               |       -        |
+|        [onDragOver](#ondragover)        |                               Define the event `dragOver`                                |                               `() => void`                               |       -        |
+| [onRefreshDropzone](#onrefreshdropzone) |                            Define the event `refreshDropzone`                            |                               `() => void`                               |       -        |
+|      [onRemoveFile](#onremovefile)      |                              Define the event `removeFile`                               |                          `(file: File) => void`                          |       -        |
+|   [onClearDropzone](#oncleardropzone)   |                             Define the event `clearDropzone`                             |                       `(files: FileList) => void`                        |       -        |
 
 ### Events
 
@@ -80,7 +80,7 @@ where `event_name` is the name of the targeted event, `callback` is what you wan
 Event fired when the mouse is hovering the dropzone.
 
 #### leave
-Event fired when the mouse stop hovering the dropozone.
+Event fired when the mouse leave the dropzone area.
 
 #### addFile
 Event fired when a file is uploaded to the dropzone.
@@ -95,13 +95,13 @@ Event fired when an error is thrown.
 Event fired when a file is drop on the dropzone.
 
 #### onDragEnter
-Event fired when the mouse enter on the are of the dropzone with a file.
+Event fired when the mouse enter on the dropzone are with a file.
 
 #### onDragLeave
-Event fired when the mouse enter on the are of the dropzone with a file.
+Event fired when the mouse enter on the dropzone area with a file.
 
 #### onDragOver
-Event fired when the mouse is hovering the dropzone with a file
+Event fired when the mouse is hovering the dropzone with a file.
 
 #### onRefreshDropzone
 Event fired when the dropzone is refreshed.  
@@ -114,11 +114,11 @@ The dropzone is refresh when:
 Event fired when a file is removed.
 
 #### onClearDropzone
-Event fired when the dropzone is cleared. See [Dropzone#clearDropzone](#cleardropzone)
+Event fired when the dropzone is cleared. See [Dropzone#clearDropzone](#dropzonecleardropzone).
 
 ## Methods
-### clearDropzone
-Remove all the files uploaded in the dropzone
+### Dropzone#clearDropzone
+Remove all the files uploaded in the dropzone.
 Use:
 ```js
 const input = document.querySelector('input#id')
@@ -126,20 +126,20 @@ const dropzone = new Dropzone(input, {})
 dropzone.clearFiles()
 ```
 
-### setMin
+### Dropzone#setMin
 Set the minimum amount of files.
 Use:
 ```js
 const input = document.querySelector('input#id')
 const dropzone = new Dropzone(input, {})
-dropzone.setMin()
+dropzone.setMin(2)
 ```
 
-### setMax
+### Dropzone#setMax
 Set the maximum amount of files.
 Use:
 ```js
 const input = document.querySelector('input#id')
 const dropzone = new Dropzone(input, {})
-dropzone.setMax()
+dropzone.setMax(5)
 ```
