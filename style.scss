@@ -30,6 +30,31 @@
         display: flex;
         gap: 10px;
         margin: 10px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        flex-wrap: nowrap;
+
+        &::-webkit-scrollbar {
+            height: 12px;
+        }
+
+        &::-webkit-scrollbar-track,
+        &::-webkit-scrollbar-thumb,
+        &::-webkit-scrollbar-track-piece {
+            border-radius: 4px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: rgb(171, 171, 171);
+        }
+
+        &::-webkit-scrollbar-thumb:hover {
+            background: rgb(110, 110, 110);
+        }
+
+        &::-webkit-scrollbar-track-piece {
+            background: rgb(215, 215, 215);
+        }
 
         .file {
             width: 80px;
@@ -38,6 +63,7 @@
             position: relative;
             border-radius: 4px;
             background: #cacaca;
+            flex: 0 0 auto;
 
             p, button {
                 position: absolute;
