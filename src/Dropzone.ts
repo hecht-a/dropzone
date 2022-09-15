@@ -152,7 +152,7 @@ export class Dropzone extends Emitter {
 	private validateLength(files: FileList | File[]): void {
 		const { length } = files;
 		const { min, max } = this.options;
-		if (min) {
+		if (min !== undefined && min !== null) {
 			if (length < min || length === 0) {
 				const error = new TooMuchFilesError(min, length);
 				this.emit("error", error);
@@ -160,7 +160,7 @@ export class Dropzone extends Emitter {
 			}
 		}
 
-		if (max) {
+		if (max !== undefined && max !== null) {
 			if (length > max) {
 				const error = new TooManyFilesError(max, length);
 				this.emit("error", error);
