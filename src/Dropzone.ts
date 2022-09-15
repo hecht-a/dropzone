@@ -281,4 +281,12 @@ export class Dropzone extends Emitter {
 		this.refreshDropzone(this.element.files);
 		this.emit("clearDropzone", files);
 	}
+
+	public setMin(min: number): void {
+		this.options.min = min;
+	}
+
+	public setMax(max: number): void {
+		this.options.max = max;
+	}
 }
