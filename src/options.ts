@@ -1,10 +1,13 @@
 import { DefaultOptions } from "./types";
 import { removeExt } from "./utils";
+/* eslint-disable multiline-ternary */
 
 export const options: DefaultOptions = {
 	hoverLabel: "hover",
 	label: "Upload files",
-	containerTemplate(files?: FileList, label?: string, id = "dropzone") {
+	min: 0,
+	max: 2,
+	containerTemplate(max: number, files?: FileList, label?: string, id = "dropzone") {
 		return `<div class="dz__dropzone" data-for="${id}">
         ${
 	files && files.length > 0
@@ -14,6 +17,9 @@ export const options: DefaultOptions = {
 		: `<div class="dz__label">
             <p>${label ?? this.label}</p>
            </div>`}
+        <div class="dz__amount">
+            ${files ? files.length : 0} / ${max}
+        </div>
     </div>`;
 	},
 	fileTemplate: (fileName: string) => `

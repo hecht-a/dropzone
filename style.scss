@@ -11,10 +11,11 @@
     margin: auto;
     border-radius: 4px;
     width: 400px;
-    height: 100px;
+    height: 140px;
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
 
     .dz__label {
         height: 100%;
@@ -29,14 +30,40 @@
         display: flex;
         gap: 10px;
         margin: 10px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        flex-wrap: nowrap;
+
+        &::-webkit-scrollbar {
+            height: 12px;
+        }
+
+        &::-webkit-scrollbar-track,
+        &::-webkit-scrollbar-thumb,
+        &::-webkit-scrollbar-track-piece {
+            border-radius: 4px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: rgb(171, 171, 171);
+        }
+
+        &::-webkit-scrollbar-thumb:hover {
+            background: rgb(110, 110, 110);
+        }
+
+        &::-webkit-scrollbar-track-piece {
+            background: rgb(215, 215, 215);
+        }
 
         .file {
             width: 80px;
-            height: 80px;
-            margin: auto 0;
+            height: 90px;
+            margin: auto 0 10px 0;
             position: relative;
             border-radius: 4px;
             background: #cacaca;
+            flex: 0 0 auto;
 
             p, button {
                 position: absolute;
@@ -64,5 +91,11 @@
                 }
             }
         }
+    }
+
+    .dz__amount {
+        position: absolute;
+        top: .4em;
+        right: .4em;
     }
 }
