@@ -4,10 +4,11 @@ import "../style.scss";
 const form = document.querySelector("form");
 const fileInput1: HTMLInputElement = form!.querySelector("#file")!;
 
-const dropzone = new Dropzone(fileInput1, { label: "Envoyez vos fichiers ici" });
+const dropzone = new Dropzone(fileInput1, { label: "Envoyez vos fichiers ici", min: 1, max: 1 });
 
 document.querySelector("button")!.addEventListener("click", () => {
 	dropzone.clearFiles();
 });
 
-dropzone.on("removeFile", console.log);
+dropzone.on("addFile", console.log);
+dropzone.on("error", console.log);

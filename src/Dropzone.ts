@@ -1,6 +1,7 @@
 import { Emitter } from "./Emitter";
 import {
-	NotInFormError, InvalidElementError, InvalidInputTypeError, AlreadyExistsError,
+	// eslint-disable-next-line max-len
+	NotInFormError, InvalidElementError, InvalidInputTypeError, AlreadyExistsError, TooManyFilesError, TooMuchFilesError,
 } from "./Exceptions";
 import { options } from "./options";
 import { DefaultOptions } from "./types";
@@ -69,8 +70,15 @@ export class Dropzone extends Emitter {
 
 		const dropzone = this.getDropzone();
 
-		this.element.addEventListener("change", () => {
+		this.element.addEventListener("change", (e) => {
+			const { files } = e.target! as EventTarget & { files: FileList };
 			this.refreshDropzone(this.element.files!);
+
+			if (files.length === 1) {
+				this.emit("addFile", files.item(0));
+			} else {
+				this.emit("addFiles", files);
+			}
 		});
 		dropzone.addEventListener("click", (e) => {
 			const target = e.target as HTMLElement | null;
@@ -97,6 +105,8 @@ export class Dropzone extends Emitter {
 		dropzone.addEventListener("drop", (e) => {
 			const { files } = e.dataTransfer!;
 			e.preventDefault();
+
+			this.validateLength(files);
 
 			this.refreshDropzone(files);
 			this.emit("drop", files);
@@ -137,6 +147,26 @@ export class Dropzone extends Emitter {
 			this.addFile(files.item(i)!);
 		}
 		this.emit("addFiles", files);
+	}
+
+	private validateLength(files: FileList | File[]): void {
+		const { length } = files;
+		const { min, max } = this.options;
+		if (min) {
+			if (length < min) {
+				const error = new TooMuchFilesError(min, length);
+				this.emit("error", error);
+				throw error;
+			}
+		}
+
+		if (max) {
+			if (length > max) {
+				const error = new TooManyFilesError(max, length);
+				this.emit("error", error);
+				throw error;
+			}
+		}
 	}
 
 	/**
