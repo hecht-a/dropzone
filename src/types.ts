@@ -2,7 +2,7 @@ type Options = {
 	id: string,
 	label: string,
 	hoverLabel: string,
-	containerTemplate: (files?: FileList, label?: string, id?: string) => string,
+	containerTemplate: (max: number, files?: FileList, label?: string, id?: string) => string,
 	fileTemplate: (fileName: string) => string,
 	min: number,
 	max: number,

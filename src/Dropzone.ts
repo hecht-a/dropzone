@@ -194,7 +194,7 @@ export class Dropzone extends Emitter {
 
 		if (!dropzone) {
 			dropzone = document.createElement("div");
-			dropzone.innerHTML = this.options.containerTemplate!(undefined, this.options.label);
+			dropzone.innerHTML = this.options.containerTemplate!(this.options.max!, undefined, this.options.label);
 			dropzone.firstElementChild!.setAttribute("data-for", this.element.id);
 			this.element.insertAdjacentElement("beforebegin", dropzone.firstElementChild!);
 		}
@@ -233,7 +233,9 @@ export class Dropzone extends Emitter {
 	 */
 	private refreshDropzone(files: FileList): void {
 		const dropzone = this.getDropzone();
-		dropzone.outerHTML = this.options.containerTemplate!(files, this.options.label, this.element.id);
+		dropzone.outerHTML = this
+			.options
+			.containerTemplate!(this.options.max!, files, this.options.label, this.element.id);
 
 		this.initButtonsListeners();
 		this.initInterface();
