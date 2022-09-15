@@ -4,3 +4,5 @@ lib
 .npmrc
 .idea
 *.log
+index.html
+src/index.ts

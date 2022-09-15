@@ -11,7 +11,7 @@ import {
 import { options } from "./options";
 import { DefaultOptions } from "./types";
 import { removeExt } from "./utils";
-import "../style.scss";
+import "./style.scss";
 
 export class Dropzone extends Emitter {
 	private readonly options: typeof options = options;

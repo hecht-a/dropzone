@@ -12,11 +12,12 @@ export default {
         typescript(),
         terser(),
         scss({
+            include: resolve("src", "style.scss"),
             output: './lib/style.css'
         }),
         copy({
             targets: [
-                {src: './style.scss', dest: 'lib'}
+                {src: resolve("src", "style.scss"), dest: 'lib'}
             ]
         })
     ],
