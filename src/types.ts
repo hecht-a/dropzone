@@ -4,6 +4,8 @@ type Options = {
 	hoverLabel: string,
 	containerTemplate: (files?: FileList, label?: string, id?: string) => string,
 	fileTemplate: (fileName: string) => string,
+	min: number,
+	max: number,
 	onHover: () => void,
 	onLeave: () => void,
 	onAddFile: (file: File) => void,
