@@ -69,8 +69,15 @@ export class Dropzone extends Emitter {
 
 		const dropzone = this.getDropzone();
 
-		this.element.addEventListener("change", () => {
+		this.element.addEventListener("change", (e) => {
+			const { files } = e.target! as EventTarget & { files: FileList };
 			this.refreshDropzone(this.element.files!);
+
+			if (files.length === 1) {
+				this.emit("addFile", files.item(0));
+			} else {
+				this.emit("addFiles", files);
+			}
 		});
 		dropzone.addEventListener("click", (e) => {
 			const target = e.target as HTMLElement | null;
