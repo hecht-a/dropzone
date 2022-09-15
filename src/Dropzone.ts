@@ -153,7 +153,7 @@ export class Dropzone extends Emitter {
 		const { length } = files;
 		const { min, max } = this.options;
 		if (min) {
-			if (length < min) {
+			if (length < min || length === 0) {
 				const error = new TooMuchFilesError(min, length);
 				this.emit("error", error);
 				throw error;
