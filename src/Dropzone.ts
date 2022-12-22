@@ -12,9 +12,12 @@ import { options } from "./options";
 import { DefaultOptions } from "./types";
 import { removeExt } from "./utils";
 import "./style.scss";
+import { FilenameAlreadyExistsError } from "./Exceptions/FilenameAlreadyExistsError";
 
 export class Dropzone extends Emitter {
 	private readonly options: typeof options = options;
+
+	private _files: FileList | undefined;
 
 	/**
      * Dropzone constructor.
@@ -113,14 +116,14 @@ export class Dropzone extends Emitter {
 
 			this.validateLength(files);
 
-			this.refreshDropzone(files);
-			this.emit("drop", files);
-
 			if (files.length === 1) {
 				this.addFile(files.item(0)!);
 			} else {
 				this.addFiles(files);
 			}
+
+			this.refreshDropzone(this._files!);
+			this.emit("drop", files);
 		});
 
 		this.onMouseHover();
@@ -134,8 +137,19 @@ export class Dropzone extends Emitter {
      */
 	private addFile(file: File): void {
 		const files = Array.from(this.element.files!);
+
+		if (files.filter((elementFile) => removeExt(elementFile.name) === removeExt(file.name)).length !== 0) {
+			const error = new FilenameAlreadyExistsError(file.name);
+			this.emit("error", error);
+
+			throw error;
+		}
+
 		files.push(file);
-		this.element.files = this.createFileList(files);
+		const fileList = this.createFileList(files);
+
+		this._files = fileList;
+		this.element.files = fileList;
 		this.emit("addFile", file);
 	}
 
@@ -181,12 +195,12 @@ export class Dropzone extends Emitter {
      * @private
      */
 	private createFileList(files: File[]): FileList {
-		const dataTransfer = new DataTransfer();
-		files.forEach((file) => {
+		const reducer = (dataTransfer: DataTransfer, file: File): DataTransfer => {
 			dataTransfer.items.add(file);
-		});
+			return dataTransfer;
+		};
 
-		return dataTransfer.files;
+		return files.reduce(reducer, new DataTransfer()).files;
 	}
 
 	/**
