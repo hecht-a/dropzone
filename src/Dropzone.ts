@@ -298,10 +298,9 @@ export class Dropzone extends Emitter {
 	private removeFile(fileName: string): FileList {
 		const { files } = this.element;
 		const filesArray = Array.from(files!);
-		const newFiles = filesArray.filter((file) => removeExt(file.name) === fileName);
-		this.emit("removeFile", newFiles[0]);
+		this.emit("removeFile", filesArray.filter((file) => removeExt(file.name) === fileName)[0]);
 
-		const newFileList = this.createFileList(newFiles);
+		const newFileList = this.createFileList(filesArray.filter((file) => removeExt(file.name) !== fileName));
 		this._files = newFileList;
 
 		return newFileList;
