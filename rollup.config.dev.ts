@@ -2,7 +2,7 @@ import remove from "rollup-plugin-delete";
 import {resolve} from "node:path";
 import {terser} from "rollup-plugin-terser";
 import typescript from "@rollup/plugin-typescript";
-import scss from 'rollup-plugin-scss'
+import scss from 'rollup-plugin-scss';
 import copy from "rollup-plugin-copy";
 
 export default {
@@ -18,6 +18,11 @@ export default {
         copy({
             targets: [
                 {src: resolve("src", "style.scss"), dest: 'lib'}
+            ]
+        }),
+        copy({
+            targets: [
+                {src: resolve("index.html"), dest: 'lib'}
             ]
         })
     ],
